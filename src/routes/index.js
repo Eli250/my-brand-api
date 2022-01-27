@@ -6,7 +6,7 @@ import userRoutes from "./api/userRoutes";
 
 const routes = express.Router();
 
-routes.use("/", welcomeRoutes);
+// routes.use("/", welcomeRoutes);
 routes.use("/aritcles", articleRoutes);
 routes.use("/queries", queriesRoutes);
 routes.use("/user", userRoutes);
