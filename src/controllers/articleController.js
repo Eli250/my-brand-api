@@ -14,8 +14,7 @@ export class ArticleController {
       const article = await ArticleServices.createArticle(data);
       res.send(article);
     } catch (error) {
-      res.status(404);
-      res.send({ error: "There was an error creating article!" });
+      res.status(404).json({ error: "There was an error creating article!" });
     }
   }
   async getAllArticles(req, res, next) {
@@ -23,8 +22,9 @@ export class ArticleController {
       const articles = await ArticleServices.getAllArticles();
       res.send(articles);
     } catch (error) {
-      res.status(404);
-      res.send({ error: "We are having trouble fetching articles!" });
+      res
+        .status(404)
+        .json({ error: "We are having trouble fetching articles!" });
     }
   }
   async getArticle(req, res, next) {
@@ -32,8 +32,7 @@ export class ArticleController {
       const article = await ArticleServices.getArticle(req.params.id);
       res.send(article);
     } catch (error) {
-      res.status(404);
-      res.send({ error: "Article not found!" });
+      res.status(404).json({ error: "Article not found!" });
     }
   }
   async updateArticle(req, res, next) {
@@ -57,8 +56,7 @@ export class ArticleController {
       const article = await ArticleServices.updateArticle(req.params.id, data);
       res.send(article);
     } catch (error) {
-      res.status(404);
-      res.send({ error: "Something went wrong!" });
+      res.status(404).json({ error: "Something went wrong!" });
     }
   }
   async deleteArticle(req, res, next) {
@@ -66,8 +64,7 @@ export class ArticleController {
       await ArticleServices.deleteArticle(req.params.id);
       res.status(204).send();
     } catch (error) {
-      res.status(404);
-      res.send({ error: "Article does not exist!" });
+      res.status(404).json({ error: "Article does not exist!" });
     }
   }
 }
