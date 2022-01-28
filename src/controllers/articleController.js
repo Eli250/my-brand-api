@@ -14,7 +14,6 @@ export class ArticleController {
       const article = await ArticleServices.createArticle(data);
       res.send(article);
     } catch (error) {
-      console.log(error);
       res.status(404);
       res.send({ error: "There was an error creating article!" });
     }
@@ -30,7 +29,7 @@ export class ArticleController {
   }
   async getArticle(req, res, next) {
     try {
-      const article = await ArticleServices.getArticle(req.parms.id);
+      const article = await ArticleServices.getArticle(req.params.id);
       res.send(article);
     } catch (error) {
       res.status(404);
@@ -52,19 +51,19 @@ export class ArticleController {
       if (req.body.image) {
         data["image"] = req.body.image;
       }
-      if (data.body.comments) {
-        data["comments"] = req.body.comments;
-      }
-      const article = await ArticleServices.updateArticle(req.parms.id, data);
+      // if (data.body.comments) {
+      //   data["comments"] = req.body.comments;
+      // }
+      const article = await ArticleServices.updateArticle(req.params.id, data);
       res.send(article);
     } catch (error) {
       res.status(404);
-      res.send({ error: "We could not find the article to update!" });
+      res.send({ error: "Something went wrong!" });
     }
   }
   async deleteArticle(req, res, next) {
     try {
-      await ArticleServices.deleteArticle(req.parms.id);
+      await ArticleServices.deleteArticle(req.params.id);
       res.status(204).send();
     } catch (error) {
       res.status(404);
