@@ -3,8 +3,8 @@ import { ArticleController } from "../../controllers/articleController";
 import multer from "multer";
 import { fileFilter } from "../../helpers/fileFilter";
 
-const fileStorrd = multer.diskStorage({});
-const upload = multer({ storage: fileStorrd, file: fileFilter });
+const fileStored = multer.diskStorage({});
+const upload = multer({ storage: fileStored, file: fileFilter });
 
 const route = express.Router();
 
