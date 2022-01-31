@@ -1,9 +1,21 @@
-import express from 'express'
+import express from "express";
+import { ArticleController } from "../../controllers/articleController";
+import multer from "multer";
+import { fileFilter } from "../../helpers/fileFilter";
 
-const route = express.Router()
+const fileStored = multer.diskStorage({});
+const upload = multer({ storage: fileStored, file: fileFilter });
 
-route.get('/', (req, res, next) => {
-    res.status(200).json({ status: 200, message: "this will return all articles", data: "" })
-})
+const route = express.Router();
 
-export default route
+route.get("/", new ArticleController().getAllArticles);
+
+route.post("/", upload.single("image"), new ArticleController().createArticle);
+
+route.get("/:id", new ArticleController().getArticle);
+
+route.patch("/:id", new ArticleController().updateArticle);
+
+route.delete("/:id", new ArticleController().deleteArticle);
+
+export default route;
