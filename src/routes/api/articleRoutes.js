@@ -1,25 +1,21 @@
 import express from "express";
 import { ArticleController } from "../../controllers/articleController";
+import multer from "multer";
+import { fileFilter } from "../../helpers/fileFilter";
+
+const fileStorrd = multer.diskStorage({});
+const upload = multer({ storage: fileStorrd, file: fileFilter });
 
 const route = express.Router();
 
-route.get("/", (req, res, next) => {
-  new ArticleController().getAllArticles(req, res, next);
-});
+route.get("/", new ArticleController().getAllArticles);
 
-route.post("/", (req, res, next) => {
-  new ArticleController().createArticle(req, res, next);
-});
-route.get("/:id", (req, res, next) => {
-  new ArticleController().getArticle(req, res, next);
-});
+route.post("/", upload.single("image"), new ArticleController().createArticle);
 
-route.patch("/:id", (req, res, next) => {
-  new ArticleController().updateArticle(req, res, next);
-});
+route.get("/:id", new ArticleController().getArticle);
 
-route.delete("/:id", (req, res, next) => {
-  new ArticleController().deleteArticle(req, res, next);
-});
+route.patch("/:id", new ArticleController().updateArticle);
+
+route.delete("/:id", new ArticleController().deleteArticle);
 
 export default route;
