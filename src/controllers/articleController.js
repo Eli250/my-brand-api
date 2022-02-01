@@ -14,8 +14,8 @@ export class ArticleController {
         image: req.body.image,
         date_created: new Date(),
       });
-      // const article = await ArticleServices.createArticle(data);
-      res.status(200).json({ satus: 200, message: "Article Created!" });
+      const article = await ArticleServices.createArticle(data);
+      res.status(200).json({ status: 200, message: "Article Created!" });
     } catch (error) {
       res.status(404).json({ error: "There was an error creating article!" });
     }
