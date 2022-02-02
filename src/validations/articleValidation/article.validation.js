@@ -1,7 +1,7 @@
 import { articleSchema } from "./article.schema.js";
 
 export const articleValidation = async (req, res, next) => {
-  const value = await articleSchema.validate(req.body);
+  const value = articleSchema.validate(req.body);
   if (value.error) {
     res.status(406).json({
       status: 406,
