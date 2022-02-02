@@ -10,21 +10,17 @@ const mode = process.env.NODE_ENV || "development";
 const server = async () => {
   try {
     if (mode === "development") {
-
       mongoose.connect(process.env.DEVELOPMENT_DB, {
         useNewUrlParser: true,
       });
     } else if (mode === "test") {
       mongoose.connect(process.env.TEST_DB, { useNewUrlParser: true });
     } else if (mode === "production") {
-      mongoose.connect(process.env.PRODUCTION_DB, {
-
-      });
+      mongoose.connect(process.env.PRODUCTION_DB, {});
     } else if (mode === "test") {
-       mongoose.connect(process.env.TEST_DB, { useNewUrlParser: true });
+      mongoose.connect(process.env.TEST_DB, { useNewUrlParser: true });
     } else if (mode === "production") {
       mongoose.connect(process.env.PRODUCTION_DB, {
-
         useNewUrlParser: true,
       });
     }
@@ -38,3 +34,4 @@ const server = async () => {
   }
 };
 server();
+export default app;
