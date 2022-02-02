@@ -16,6 +16,7 @@ export class ArticleController {
       });
       const article = await ArticleServices.createArticle(data);
       res.status(200).json({ status: 200, message: "Article Created!" });
+
     } catch (error) {
       res.status(404).json({ error: "There was an error creating article!" });
     }
