@@ -28,9 +28,9 @@ export class QueryController {
   async deleteQuery(req, res, next) {
     try {
       await QueryServices.deleteQuery(req.params.id);
+      res.status(200).json({ message: "Query Deleted Successfully!" });
     } catch (error) {
-      res.status(404);
-      res.send({ error: "Query does not exist!" });
+      res.status(404).json({ error: "Query Does Not Exist!" });
     }
   }
 }
