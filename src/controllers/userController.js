@@ -9,7 +9,6 @@ export class UserControllers {
       const exist = await userExist(req.body.email);
       if (exist) {
         res.status(409).json({
-          status: 409,
           message: "User Exists!. Please Use Another Email or Log In!",
         });
       } else {
@@ -27,13 +26,14 @@ export class UserControllers {
         };
         const createdUser = await createUser(user);
         res.status(201).json({
-          status: 201,
           message: "User Registered!",
           user: createdUser,
         });
       }
     } catch (error) {
-      console.log(error);
+      res.status(500).json({
+        message: "Something Went Wrong!!",
+      });
     }
   }
   async login(req, res, next) {
@@ -42,7 +42,7 @@ export class UserControllers {
       if (exist) {
         const valid = await comparePassword(req.body.password, exist.password);
         if (!valid) {
-          res.status(401).json({ status: 401, message: "Invalid credentials" });
+          res.status(401).json({ message: "Invalid credentials" });
         }
         const token = generateToken({ id: exist._id });
         res.status(200).json({
@@ -51,10 +51,12 @@ export class UserControllers {
           accessToken: token,
         });
       } else {
-        res.status(401).json({ status: 401, message: "Invalid Credentials!" });
+        res.status(401).json({ message: "Invalid Credentials!" });
       }
     } catch (error) {
-      console.log(error);
+      res.status(500).json({
+        message: "Something Went Wrong! Please Try Again!",
+      });
     }
   }
 }
