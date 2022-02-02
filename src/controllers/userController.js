@@ -8,12 +8,10 @@ export class UserControllers {
     try {
       const exist = await userExist(req.body.email);
       if (exist) {
-        res
-          .status(409)
-          .json({
-            status: 409,
-            message: "User with this email already exist. use different one",
-          });
+        res.status(409).json({
+          status: 409,
+          message: "User Exists!. Please Use Another Email or Log In!",
+        });
       } else {
         if (req.file) {
           req.body.picture = await uploadFile(req);
@@ -24,17 +22,15 @@ export class UserControllers {
         const user = {
           username: req.body.username,
           email: req.body.email,
-          password: await hashPassword(req.body.password),
+          password: hashPassword(req.body.password),
           picture: req.body.picture,
         };
         const createdUser = await createUser(user);
-        res
-          .status(201)
-          .json({
-            status: 201,
-            message: "user registered successfully",
-            user: createdUser,
-          });
+        res.status(201).json({
+          status: 201,
+          message: "User Registered!",
+          user: createdUser,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -46,18 +42,16 @@ export class UserControllers {
       if (exist) {
         const valid = await comparePassword(req.body.password, exist.password);
         if (!valid) {
-          res.status(403).json({ status: 403, message: "Invalid credentials" });
+          res.status(401).json({ status: 401, message: "Invalid credentials" });
         }
-        const token = await generateToken({ id: exist._id });
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message: "Logged in successfully",
-            accessToken: token,
-          });
+        const token = generateToken({ id: exist._id });
+        res.status(200).json({
+          status: 200,
+          message: "Successfully Logged In!",
+          accessToken: token,
+        });
       } else {
-        res.status(403).json({ status: 403, message: "Invalid credentials" });
+        res.status(401).json({ status: 401, message: "Invalid Credentials!" });
       }
     } catch (error) {
       console.log(error);

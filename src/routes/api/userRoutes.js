@@ -15,6 +15,6 @@ route.post(
   userValidation,
   userControllers.register
 );
-route.post("/login", userControllers.login);
+route.post("/login", uploads.single(""), userControllers.login);
 
 export default route;
