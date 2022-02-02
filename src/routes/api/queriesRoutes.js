@@ -9,7 +9,6 @@ const route = express.Router();
 route.get("/", new QueryController().getAllQueries);
 
 route.post("/", validateQuery, new QueryController().createQuery);
-=======
 
 route.delete("/:id", new QueryController().deleteQuery);
 export default route;
