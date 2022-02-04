@@ -1,0 +1,240 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API",
+    "description": "API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "name": "DEV"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Home"],
+        "summary": "Home",
+        "description": "Home",
+        "operationId": "getHome",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/user/register": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Register",
+        "description": "Register User",
+        "operationId": "postUsersRegister",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "formData",
+            "description": "Username",
+            "required": true
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "Email",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "Password",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/user/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Login",
+        "description": "Login",
+        "operationId": "postUsersLogin",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/articles": {
+      "get": {
+        "tags": ["Articles"],
+        "summary": "Get all articles",
+        "description": "Get all articles",
+        "operationId": "getArticles",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Articles"],
+        "summary": "Create article",
+        "description": "Create article",
+        "operationId": "postArticles",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "name": "title",
+            "in": "formData",
+            "description": "title",
+            "required": true
+          },
+          {
+            "name": "content",
+            "in": "formData",
+            "description": "content",
+            "required": true
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file",
+            "description": "image",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Articles"],
+        "summary": "Update Article",
+        "description": "Update An Article",
+        "operationId": "patchArticle",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle Id",
+            "required": true
+          },
+          {
+            "name": "title",
+            "in": "formData",
+            "description": "title",
+            "required": true
+          },
+          {
+            "name": "content",
+            "in": "formData",
+            "description": "content",
+            "required": true
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file",
+            "description": "image",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/articles/{id}": {
+      "get": {
+        "tags": ["Articles"],
+        "summary": "Get One Article",
+        "description": "Get  Article By Id",
+        "operationId": "getArticle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Articles"],
+        "summary": "Delete Article",
+        "description": "Delete One  Article",
+        "operationId": "delArticle",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
