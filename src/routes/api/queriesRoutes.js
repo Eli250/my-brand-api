@@ -8,8 +8,9 @@ import { authenticate } from "../../middlewares/authenticate";
 const route = express.Router();
 
 route.get("/", new QueryController().getAllQueries);
+route.get("/:id", new QueryController().getOneQuery);
 
-route.post("/", authenticate, validateQuery, new QueryController().createQuery);
+route.post("/", validateQuery, new QueryController().createQuery);
 
 route.delete("/:id", authenticate, new QueryController().deleteQuery);
 export default route;

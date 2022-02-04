@@ -25,6 +25,14 @@ export class QueryController {
       res.send({ error: "No Queries Found!" });
     }
   }
+  async getOneQuery(req, res, next) {
+    try {
+      const query = await QueryServices.getOneQuery(req.params.id);
+      res.send(query);
+    } catch (error) {
+      res.status(404).json({ error: "Article not found!" });
+    }
+  }
   async deleteQuery(req, res, next) {
     try {
       await QueryServices.deleteQuery(req.params.id);

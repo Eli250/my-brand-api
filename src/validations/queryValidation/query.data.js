@@ -1,12 +1,7 @@
 import joi from "joi";
 
 export const queryData = joi.object({
-  senderName: joi
-    .string()
-    .regex(/^[A-Z-a-z]+$/)
-    .min(3)
-    .max(45)
-    .required(),
+  senderName: joi.string().min(3).max(45).required(),
   email: joi
     .string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "org"] } })
