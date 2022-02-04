@@ -10,7 +10,6 @@ use(chaiHttp);
 const testArticle = {
   title: "This is a testing article!",
   content: "This checks if we are able to create the new article.",
-  description: "This is the created article.",
 };
 
 let tempToken = "";

@@ -15,25 +15,26 @@ export class ArticleServices {
   }
   static async updateArticle(id, data) {
     const article = await Article.findOne({ _id: id });
-    if (data.title) {
-      article.title = data.title;
+    if (!article) {
+      return `Article with id: ${id} doesn't exist`;
+    } else {
+      article.title = data.title ? data.title : article.title;
+      article.content = data.content ? data.content : article.content;
+      article.image = data.image ? data.image : article.image;
+      const updatedArticle = await article.save();
+      return updatedArticle;
     }
-    if (data.description) {
-      article.description = data.description;
-    }
-    if (data.content) {
-      article.content = data.content;
-    }
-    if (data.image) {
-      article.image = data.image;
-    }
-    if (data.comments) {
-      article.comments = data.comments;
-    }
-    await article.save();
-    return article;
   }
   static async deleteArticle(id) {
-    return await Article.deleteOne({ _id: id });
+    try {
+      const result = await Article.findByIdAndDelete(id);
+      if (!result) {
+        return "The article you are trying to delete does not exist";
+      } else {
+        return "Article deleted successfully";
+      }
+    } catch (error) {
+      return "the article you are trying to delete does not exist";
+    }
   }
 }
