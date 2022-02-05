@@ -3,6 +3,7 @@ import { expect, use } from "chai";
 import chaiHttp from "chai-http";
 import { before } from "mocha";
 import app from "../src/app";
+import Article from "../src/models/article";
 import "dotenv/config";
 
 use(chaiHttp);
@@ -10,6 +11,7 @@ use(chaiHttp);
 const testArticle = {
   title: "This is a testing article!",
   content: "This checks if we are able to create the new article.",
+  description: "This is the created article.",
 };
 
 let tempToken = "";
@@ -30,12 +32,14 @@ describe("ARTICLE END-POINT TESTING", () => {
       .catch((err) => done(err));
   });
   it("Should Allow Create Article.", (done) => {
+    console.log(tempToken);
     request(app)
       .post("/api/v1/articles")
       .set("Authorization", tempToken)
       .attach("image", "./public/Victor Status.png", "status.png")
       .field(testArticle)
       .end((err, res) => {
+        console.log(res.body);
         expect(res.statusCode).to.equal(200);
         done();
       });
@@ -61,6 +65,7 @@ describe("ARTICLE END-POINT TESTING", () => {
       "/api/v1/articles/61f42201beffd6aaf5a96956"
     );
     expect(res).to.have.status([200]);
+    // expect(res.type).to.have.equal("application/json");
   });
   it("Should Not Get Any Article", async () => {
     const res = await request(app).get("/api/v1/aritcle/");
