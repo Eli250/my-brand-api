@@ -1,10 +1,31 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "API",
-    "description": "API",
-    "version": "1.0.0"
+    "title": "My Brand API",
+    "description": "This is My Brand API",
+    "version": "1.0.0",
+    "contact": {
+      "email": "hirwaeli@outlook.com"
+    }
   },
+  "tags": [
+    {
+      "name": "Home",
+      "description": "Entry Route"
+    },
+    {
+      "name": "Users",
+      "description": "Open end points for users"
+    },
+    {
+      "name": "Articles",
+      "description": "Article Operations"
+    },
+    {
+      "name": "Queries",
+      "description": "Queries Operations"
+    }
+  ],
   "servers": [
     {
       "url": "http://localhost:3000",
@@ -33,22 +54,13 @@
         "operationId": "postUsersRegister",
         "parameters": [
           {
-            "name": "username",
-            "in": "formData",
-            "description": "Username",
-            "required": true
-          },
-          {
-            "name": "email",
-            "in": "formData",
-            "description": "Email",
-            "required": true
-          },
-          {
-            "name": "password",
-            "in": "formData",
-            "description": "Password",
-            "required": true
+            "in": "body",
+            "name": "Register",
+            "description": "User Register",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/Register"
+            }
           }
         ],
         "responses": {
@@ -66,7 +78,7 @@
         "operationId": "postUsersLogin",
         "parameters": [
           {
-            "name": "body",
+            "name": "Login",
             "in": "body",
             "description": "Login",
             "required": true,
@@ -96,8 +108,8 @@
       },
       "post": {
         "tags": ["Articles"],
-        "summary": "Create article",
-        "description": "Create article",
+        "summary": "Create article item",
+        "description": "Adds an article in the system.",
         "operationId": "postArticles",
         "parameters": [
           {
@@ -222,9 +234,66 @@
           }
         }
       }
+    },
+    "/api/v1/queries": {
+      "post": {
+        "tags": ["Queries"],
+        "summary": "Create Query",
+        "description": "Sends query to the administrator.",
+        "operationId": "postQuery",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Query",
+            "description": "Add Query",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/Queries"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Queries"],
+        "summary": "Retrieve Queries",
+        "description": "Retrieve all submitted queries",
+        "operationId": "getQueries",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
     }
   },
   "definitions": {
+    "Register": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
     "Login": {
       "type": "object",
       "properties": {
@@ -232,6 +301,20 @@
           "type": "string"
         },
         "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Queries": {
+      "type": "object",
+      "properties": {
+        "senderName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "message": {
           "type": "string"
         }
       }

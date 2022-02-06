@@ -30,6 +30,9 @@ export class ArticleServices {
       return updatedArticle;
     }
   }
+  static async commentsOnArticle(id) {
+    return await Article.findById(id).populate("comments");
+  }
   static async deleteArticle(id) {
     try {
       const result = await Article.findByIdAndDelete(id);
