@@ -1,19 +1,31 @@
 import { expect, request, use } from "chai";
 import chaiHttp from "chai-http";
 import app from "../src/app";
+import User from "../src/models/user";
+import { hashPassword } from "../src/helpers/passwordSecurity";
 import "dotenv/config";
 
 use(chaiHttp);
-const tempUser = {
-  username: "HirwaD",
-  email: "hirwa8@test.com",
-  password: "@Password1",
-};
+
 describe("USER END-POINT-TEST", () => {
+  before("BEFORE ALL TEST", async () => {
+    const user = {
+      username: "Tester",
+      email: "tester@test.com",
+      password: hashPassword("@Test123"),
+    };
+
+    await new User(user).save();
+  });
+
   it("Should Create User", (done) => {
     request(app)
       .post("/api/v1/user/register")
-      .send(tempUser)
+      .send({
+        username: "@Test123",
+        email: "user1@test.com",
+        password: "@Test123",
+      })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         done();
@@ -36,13 +48,19 @@ describe("USER END-POINT-TEST", () => {
     request(app)
       .post("/api/v1/user/login")
       .send({
-        email: "hirwa7@test.com",
-        password: "@Password1",
+        email: "tester@test.com",
+        password: "@Test123",
       })
       .then((res) => {
         expect(res.body.message).to.be.eql("Successfully Logged In!");
         done();
       })
       .catch((err) => done(err));
+  });
+  after("AFTER CCLEAR USER", (done) => {
+    User.deleteMany({}, (err) => {
+      console.log("success");
+      done();
+    });
   });
 });

@@ -54,8 +54,9 @@ export class UserControllers {
         res.status(401).json({ message: "Invalid Credentials!" });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({
-        message: "Something Went Wrong! Please Try Again!",
+        message: "Something Went Wrong!",
       });
     }
   }

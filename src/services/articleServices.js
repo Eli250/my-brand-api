@@ -10,13 +10,18 @@ export class ArticleServices {
     return articles;
   }
   static async getArticle(id) {
-    const article = await Article.findOne({ _id: id });
-    return article;
+    try {
+      const article = await Article.findOne({ _id: id });
+      if (!article) return "Article Not Found!";
+      else return article;
+    } catch (error) {
+      return "Something Went Wrong!";
+    }
   }
   static async updateArticle(id, data) {
     const article = await Article.findOne({ _id: id });
     if (!article) {
-      return `Article with id: ${id} doesn't exist`;
+      return `Article With ID: ${id} Does Not Exist!`;
     } else {
       article.title = data.title ? data.title : article.title;
       article.content = data.content ? data.content : article.content;
@@ -25,16 +30,19 @@ export class ArticleServices {
       return updatedArticle;
     }
   }
+  static async commentsOnArticle(id) {
+    return await Article.findById(id).populate("comments");
+  }
   static async deleteArticle(id) {
     try {
       const result = await Article.findByIdAndDelete(id);
       if (!result) {
-        return "The article you are trying to delete does not exist";
+        return "The article You Are Trying To Delete Does Not Exist!";
       } else {
-        return "Article deleted successfully";
+        return "Article Deleted Successfully";
       }
     } catch (error) {
-      return "the article you are trying to delete does not exist";
+      return "Something Went Wrong!";
     }
   }
 }

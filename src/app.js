@@ -11,43 +11,40 @@ const app = express();
 
 const port = process.env.PORT || 3000;
 const mode = process.env.NODE_ENV || "development";
-const server = async () => {
-  try {
-    if (mode === "development") {
-      mongoose.connect(process.env.DEVELOPMENT_DB, {
-        useNewUrlParser: true,
-      });
-      console.log("DEV DB CONNECTED!");
-    } else if (mode === "test") {
-      mongoose.connect(process.env.TEST_DB, { useNewUrlParser: true });
-      console.log("TEST DB CONNECTED!");
-    } else if (mode === "production") {
-      mongoose.connect(process.env.PRODUCTION_DB, {
-        useNewUrlParser: true,
-      });
-      console.log("PRO DB CONNECTED!");
-    }
-    app.use(express.json());
-    app.use(cors());
-    app.use(morgan("dev"));
-
-    app.get("/", (req, res) => {
-      res.json({ message: "Welcome to my the API" });
+try {
+  if (mode === "development") {
+    mongoose.connect(process.env.DEVELOPMENT_DB, {
+      useNewUrlParser: true,
     });
-    app.use("/api/v1/", routes);
-    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-    app.use("*", (req, res, next) => {
-      res.status(404).json({
-        error: "NOT FOUND",
-      });
+    console.log("DEV DB CONNECTED!");
+  } else if (mode === "test") {
+    mongoose.connect(process.env.TEST_DB, { useNewUrlParser: true });
+    console.log("TEST DB CONNECTED!");
+  } else if (mode === "production") {
+    mongoose.connect(process.env.PRODUCTION_DB, {
+      useNewUrlParser: true,
     });
-
-    app.listen(port, () => {
-      console.log(`The server is running on port ${port}`);
-    });
-  } catch (error) {
-    console.log(error);
+    console.log("PRO DB CONNECTED!");
   }
-};
-server();
+  app.use(express.json());
+  app.use(cors());
+  app.use(morgan("dev"));
+
+  app.get("/", (req, res) => {
+    res.json({ message: "Welcome to my the API" });
+  });
+  app.use("/api/v1/", routes);
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use("*", (req, res, next) => {
+    res.status(404).json({
+      error: "NOT FOUND",
+    });
+  });
+
+  app.listen(port, () => {
+    console.log(`The server is running on port ${port}`);
+  });
+} catch (error) {
+  console.log(error);
+}
 export default app;
