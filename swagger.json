@@ -225,6 +225,58 @@
         }
       }
     },
+    "/api/v1/articles/{id}/comments": {
+      "post": {
+        "tags": ["Articles"],
+        "summary": "Add Comment",
+        "description": "Comment on Article",
+        "operationId": "addComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle Id",
+            "required": true
+          },
+          {
+            "name": "Comment",
+            "in": "body",
+            "description": "Article Comment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Comment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Articles"],
+        "summary": "Get Comments",
+        "description": "Read Article Comments",
+        "operationId": "getComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Article Not Found!"
+          }
+        }
+      }
+    },
     "/api/v1/queries": {
       "post": {
         "tags": ["Queries"],
@@ -302,6 +354,17 @@
           "type": "string"
         },
         "content": {
+          "type": "string"
+        }
+      }
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "sender": {
+          "type": "string"
+        },
+        "comment": {
           "type": "string"
         }
       }
