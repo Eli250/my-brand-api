@@ -73,14 +73,12 @@ describe("ARTICLE END-POINT TESTING", () => {
       .catch((err) => done(err));
   });
   it("Should Allow Create Article.", (done) => {
-    console.log(tempToken);
     request(app)
       .post("/api/v1/articles")
       .set("Authorization", tempToken)
       .attach("image", "./public/Victor Status.png", "status.png")
       .field(tempArticle)
       .end((err, res) => {
-        console.log(res.body);
         expect(res.statusCode).to.equal(200);
         done();
       });
@@ -104,7 +102,6 @@ describe("ARTICLE END-POINT TESTING", () => {
   it("Should Get One Article", async () => {
     const res = await request(app).get(`/api/v1/articles/${ATest1._id}`);
     expect(res).to.have.status([200]);
-    // expect(res.type).to.have.equal("application/json");
   });
   it("Should Not Get Any Article", async () => {
     const res = await request(app).get(`/api/v1/aritcle/${ATest1._id}`);
@@ -113,7 +110,6 @@ describe("ARTICLE END-POINT TESTING", () => {
 
   after("AFTER CLEAR POST DATA", (done) => {
     Article.deleteMany({}, (err) => {
-      console.log("success");
       done();
     });
   });
