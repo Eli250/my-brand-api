@@ -41,12 +41,9 @@ describe("QUERY END-POINT-TEST", () => {
 
     const createQuery2 = async function () {
       const query2 = Query({
-        sender: {
-          name: "sender name",
-          email: "testtest@test.com",
-        },
+        senderName: "Another One",
         message: "Test query message",
-        location: "testLocation",
+        email: "test@test.com",
       });
 
       const setQueryTest2 = async function () {
@@ -108,24 +105,11 @@ describe("QUERY END-POINT-TEST", () => {
       });
   });
 
-  it("SHOULD GET ONE QUERY", (done) => {
-    request(app)
-      .get(`/api/v1/queries/${queryTest2._id}`)
-      .set("Authorization", tempToken)
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
-        done();
-      });
-  });
-
-  it("SHOULD DELETE ONE QUERY", (done) => {
-    request(app)
-      .delete(`/api/v1/queries/${queryTest._id}`)
-      .set("Authorization", tempToken)
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
-        done();
-      });
+  it("SHOULD GET ONE QUERY", async () => {
+    const res = await request(app)
+      .get(`/api/v1/queries/${queryTest._id}`)
+      .set("Authorization", tempToken);
+    expect(res).to.have.status([200]);
   });
 
   after("AFTER ALL QUERY TEST", (done) => {
