@@ -103,6 +103,40 @@ describe("ARTICLE END-POINT TESTING", () => {
     const res = await request(app).get(`/api/v1/articles/${ATest1._id}`);
     expect(res).to.have.status([200]);
   });
+  it("Should Add Comment", async () => {
+    const res = await request(app)
+      .post(`/api/v1/articles/${ATest1._id}/comments`)
+      .send({
+        sender: "Hirwa",
+        comment: "That really worlks!",
+      });
+    expect(res).to.have.status([201]);
+  });
+  it("Should Fail to Add Comment", async () => {
+    const res = await request(app)
+      .post(`/api/v1/articles/${ATest1._id}/comme`)
+      .send({
+        sender: "Hirwa",
+        comment: "That really worlks!",
+      });
+    expect(res).to.have.status([404]);
+  });
+  it("Should Fail to Add Comment (No article found)", async () => {
+    const res = await request(app).post(`/api/v1/articles/comments`).send({
+      sender: "Hirwa",
+      comment: "That really worlks!",
+    });
+    expect(res).to.have.status([404]);
+  });
+  it("Should Get Comments", async () => {
+    const res = await request(app)
+      .get(`/api/v1/articles/${ATest1._id}/comments`)
+      .send({
+        sender: "Hirwa",
+        comment: "That really worlks!",
+      });
+    expect(res).to.have.status([200]);
+  });
   it("Should Not Get Any Article", async () => {
     const res = await request(app).get(`/api/v1/aritcle/${ATest1._id}`);
     expect(res).to.have.status([404]);

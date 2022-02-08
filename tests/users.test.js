@@ -44,7 +44,7 @@ describe("USER END-POINT-TEST", () => {
         done();
       });
   });
-  it("Log In First", (done) => {
+  it("Log In Succceed", (done) => {
     request(app)
       .post("/api/v1/user/login")
       .send({
@@ -57,7 +57,20 @@ describe("USER END-POINT-TEST", () => {
       })
       .catch((err) => done(err));
   });
-  after("AFTER CCLEAR USER", (done) => {
+  it("Log In Fail (Invalid Credentials)", (done) => {
+    request(app)
+      .post("/api/v1/user/login")
+      .send({
+        email: "tester@test.com",
+        password: "@Tes",
+      })
+      .then((res) => {
+        expect(res.body.message).to.be.eql("Invalid credentials!");
+        done();
+      })
+      .catch((err) => done(err));
+  });
+  after("AFTER CLEAR USER", (done) => {
     User.deleteMany({}, (err) => {
       console.log("success");
       done();

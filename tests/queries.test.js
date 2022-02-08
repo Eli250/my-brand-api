@@ -56,7 +56,7 @@ describe("QUERY END-POINT-TEST", () => {
     createQuery2();
     done();
   });
-  it("Should Log In First", (done) => {
+  it("Log In To Access Queries", (done) => {
     request(app)
       .post("/api/v1/user/login")
       .send({
@@ -71,7 +71,7 @@ describe("QUERY END-POINT-TEST", () => {
       })
       .catch((err) => done(err));
   });
-  it("QUERY SHOULD BE CREATED", (done) => {
+  it("Query Creation Succeed!", (done) => {
     request(app)
       .post("/api/v1/queries")
       .send({
@@ -85,7 +85,7 @@ describe("QUERY END-POINT-TEST", () => {
       });
   });
 
-  it("SHOULD GET ALL QUERIES", (done) => {
+  it("Should Get All Queries", (done) => {
     request(app)
       .get("/api/v1/queries")
       .set("Authorization", tempToken)
@@ -94,8 +94,27 @@ describe("QUERY END-POINT-TEST", () => {
         done();
       });
   });
-
-  it("GET QUERY SHOULD FAIL", (done) => {
+  it("Should Get One Query", async () => {
+    const res = await request(app)
+      .get(`/api/v1/queries/${queryTest._id}`)
+      .set("Authorization", tempToken);
+    expect(res).to.have.status([200]);
+  });
+  it("Should Fail To Create Query", (done) => {
+    request(app)
+      .post("/api/v1/queries")
+      .send({
+        senderName: "New User",
+        message: "Test query message create",
+      })
+      .end((err, res) => {
+        expect(res.body.message).to.equal(
+          "Please check your input: email is required"
+        );
+        done();
+      });
+  });
+  it("Should Fail To get All Queries", (done) => {
     request(app)
       .get("/api/v1/querie")
       .set("Authorization", tempToken)
@@ -104,14 +123,18 @@ describe("QUERY END-POINT-TEST", () => {
         done();
       });
   });
-
-  it("SHOULD GET ONE QUERY", async () => {
-    const res = await request(app)
-      .get(`/api/v1/queries/${queryTest._id}`)
-      .set("Authorization", tempToken);
-    expect(res).to.have.status([200]);
+  it("Should Fail (Anauthorized)", (done) => {
+    request(app)
+      .get("/api/v1/queries")
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(401);
+        done();
+      });
   });
-
+  it("Should Fail To Get One Query (Anauthorized)", async () => {
+    const res = await request(app).get(`/api/v1/queries/${queryTest._id}`);
+    expect(res).to.have.status([401]);
+  });
   after("AFTER ALL QUERY TEST", (done) => {
     Query.deleteMany({}, (err) => {
       done();

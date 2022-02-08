@@ -12,7 +12,7 @@ export class QueryController {
       const query = await QueryServices.createQuery(data);
       res.status(200).json({ message: "Query Created!:", data: query });
     } catch (error) {
-      res.status(500).json({ error: "Something Went Wrong!" });
+      res.status(400).json({ error: "Something Went Wrong!" });
     }
   }
   async getAllQueries(req, res, next) {
