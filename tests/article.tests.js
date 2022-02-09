@@ -7,6 +7,7 @@ import User from "../src/models/user";
 import Article from "../src/models/article";
 import "dotenv/config";
 import { hashPassword } from "../src/helpers/passwordSecurity";
+import { generateToken } from "../src/helpers/jwtFunctions";
 
 use(chaiHttp);
 let tempArticle = {
@@ -19,7 +20,7 @@ let tempUser;
 let tempToken = "";
 
 describe("ARTICLE END-POINT TESTING", () => {
-  before("POPULATE TEST", (done) => {
+  beforeEach("POPULATE TEST", (done) => {
     const user = {
       username: "Admin",
       email: "admin@test.com",
@@ -27,6 +28,8 @@ describe("ARTICLE END-POINT TESTING", () => {
     };
 
     new User(user).save();
+
+    tempToken = `Bearer ${generateToken({ id: user._id })}`;
 
     const createArticle = async function () {
       const testArticle1 = Article({
@@ -55,23 +58,10 @@ describe("ARTICLE END-POINT TESTING", () => {
     };
 
     createArticle2();
+
     done();
   });
-  it("Should Log In First", (done) => {
-    request(app)
-      .post("/api/v1/user/login")
-      .send({
-        email: "admin@test.com",
-        password: "@Admin123",
-      })
-      .expect(200)
-      .then((res) => {
-        expect(res.body.message).to.be.eql("Successfully Logged In!");
-        tempToken = `Bearer ${res.body.accessToken}`;
-        done();
-      })
-      .catch((err) => done(err));
-  });
+
   it("Should Allow Create Article.", (done) => {
     request(app)
       .post("/api/v1/articles")

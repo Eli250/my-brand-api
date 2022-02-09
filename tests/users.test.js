@@ -1,4 +1,5 @@
-import { expect, request, use } from "chai";
+import { expect, use } from "chai";
+import request from "supertest";
 import chaiHttp from "chai-http";
 import app from "../src/app";
 import User from "../src/models/user";
@@ -51,6 +52,7 @@ describe("USER END-POINT-TEST", () => {
         email: "tester@test.com",
         password: "@Test123",
       })
+      .expect(200)
       .then((res) => {
         expect(res.body.message).to.be.eql("Successfully Logged In!");
         done();
