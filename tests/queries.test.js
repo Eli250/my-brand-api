@@ -6,7 +6,7 @@ import "dotenv/config";
 import User from "../src/models/user";
 import Query from "../src/models/query";
 import { hashPassword } from "../src/helpers/passwordSecurity";
-
+import { generateToken } from "../src/helpers/jwtFunctions";
 use(chaiHttp);
 
 let queryTest;
@@ -23,6 +23,7 @@ describe("QUERY END-POINT-TEST", () => {
     };
 
     new User(user).save();
+    tempToken = `Bearer ${generateToken({ id: user._id })}`;
 
     const createQuery1 = async function () {
       const query1 = Query({
@@ -56,21 +57,7 @@ describe("QUERY END-POINT-TEST", () => {
     createQuery2();
     done();
   });
-  it("Log In To Access Queries", (done) => {
-    request(app)
-      .post("/api/v1/user/login")
-      .send({
-        email: "admin@test.com",
-        password: "@Admin123",
-      })
-      .expect(200)
-      .then((res) => {
-        expect(res.body.message).to.be.eql("Successfully Logged In!");
-        tempToken = `Bearer ${res.body.accessToken}`;
-        done();
-      })
-      .catch((err) => done(err));
-  });
+
   it("Query Creation Succeed!", (done) => {
     request(app)
       .post("/api/v1/queries")

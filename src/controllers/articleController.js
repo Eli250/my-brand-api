@@ -65,6 +65,7 @@ export class ArticleController {
         res.status(200).json({ message: "Article Created!", data: article });
       else res.status(404).json({ message: article });
     } catch (error) {
+      console.log(error);
       res.status(404).json({ error: "Something went wrong!" });
     }
   }
@@ -72,15 +73,12 @@ export class ArticleController {
     try {
       const article = await ArticleServices.getArticle(req.params.id);
       if (article) {
-        console.log("---CREATING----");
         const comment = new Comment({
           sender: req.body.sender,
           comment: req.body.comment,
           article: req.params.id,
         });
-        console.log("---CREATED DONE----");
         const savedComment = await CommentServices.createComment(comment);
-        console.log("---COMMENT DONE----");
         article.comments.push(savedComment);
         const articleSaved = await ArticleServices.createArticle(article);
         return res.status(201).send(articleSaved);
@@ -95,7 +93,6 @@ export class ArticleController {
       const article = await ArticleServices.commentsOnArticle(id);
       res.send(article.comments);
     } catch (error) {
-      console.error(error);
       res.status(404).send({ error: "Article doesn't exist!" });
     }
   }

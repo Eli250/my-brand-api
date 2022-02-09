@@ -5,6 +5,7 @@ import { before } from "mocha";
 import app from "../src/app";
 import User from "../src/models/user";
 import Article from "../src/models/article";
+import { ArticleServices } from "../src/services/articleServices";
 import "dotenv/config";
 import { hashPassword } from "../src/helpers/passwordSecurity";
 import { generateToken } from "../src/helpers/jwtFunctions";
@@ -93,6 +94,7 @@ describe("ARTICLE END-POINT TESTING", () => {
     const res = await request(app).get(`/api/v1/articles/${ATest1._id}`);
     expect(res).to.have.status([200]);
   });
+
   it("Should Add Comment", async () => {
     const res = await request(app)
       .post(`/api/v1/articles/${ATest1._id}/comments`)

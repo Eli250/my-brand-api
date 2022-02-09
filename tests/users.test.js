@@ -3,36 +3,43 @@ import request from "supertest";
 import chaiHttp from "chai-http";
 import app from "../src/app";
 import User from "../src/models/user";
-import { hashPassword } from "../src/helpers/passwordSecurity";
 import "dotenv/config";
 
 use(chaiHttp);
 
-describe("USER END-POINT-TEST", () => {
+describe("USER END-POINT-TEST", (done) => {
   before("BEFORE ALL TEST", async () => {
-    const user = {
-      username: "Tester",
-      email: "tester@test.com",
-      password: hashPassword("@Test123"),
-    };
-
-    await new User(user).save();
+    const res = await request(app).post("/api/v1/user/register").send({
+      username: "mocker",
+      email: "mocker@test.com",
+      password: "@Test123",
+    });
+    expect(res).to.have.status([201]);
   });
 
-  it("Should Create User", (done) => {
+  it("Should Create User", async () => {
+    const res = await request(app).post("/api/v1/user/register").send({
+      username: "@Test123",
+      email: "user1@test.com",
+      password: "@Test123",
+    });
+    expect(res).to.have.status([201]);
+  });
+
+  it("Log In Succceed", (done) => {
     request(app)
-      .post("/api/v1/user/register")
+      .post("/api/v1/user/login")
       .send({
-        username: "@Test123",
-        email: "user1@test.com",
+        email: "mocker@test.com",
         password: "@Test123",
       })
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+      .expect(200)
+      .then((res) => {
+        expect(res.body.message).to.be.eql("Successfully Logged In!");
         done();
-      });
+      })
+      .catch((err) => done(err));
   });
-
   it("Should Not Login", (done) => {
     request(app)
       .post("/api/v1/user/login")
@@ -45,20 +52,6 @@ describe("USER END-POINT-TEST", () => {
         done();
       });
   });
-  it("Log In Succceed", (done) => {
-    request(app)
-      .post("/api/v1/user/login")
-      .send({
-        email: "tester@test.com",
-        password: "@Test123",
-      })
-      .expect(200)
-      .then((res) => {
-        expect(res.body.message).to.be.eql("Successfully Logged In!");
-        done();
-      })
-      .catch((err) => done(err));
-  });
   it("Log In Fail (Invalid Credentials)", (done) => {
     request(app)
       .post("/api/v1/user/login")
@@ -67,7 +60,7 @@ describe("USER END-POINT-TEST", () => {
         password: "@Tes",
       })
       .then((res) => {
-        expect(res.body.message).to.be.eql("Invalid credentials!");
+        expect(res.body.message).to.be.eql("Invalid Credentials!");
         done();
       })
       .catch((err) => done(err));
