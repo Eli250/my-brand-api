@@ -11,9 +11,9 @@ on:
 env: 
   TEST_DB: ${{ secrets.TEST_DB }}
   JWT_SECRETE: ${{ secrets.JWT_SECRETE }}
-  CLOUD_NAME: ${{ secrets.CLOUD_NAME }}
-  API_KEY: ${{ secrets.API_KEY }}
-  API_SECRET: ${{ secrets.API_SECRET }}
+  CLOUDINARY_NAME: ${{ secrets.CLOUDINARY_NAME }}
+  CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+  CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
   TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
 jobs:
   build:
