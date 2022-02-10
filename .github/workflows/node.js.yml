@@ -8,9 +8,10 @@ on:
     branches: [develop]
   pull_request:
     branches: [develop]
-env: 
+env:
   TEST_DB: ${{ secrets.TEST_DB }}
   JWT_SECRETE: ${{ secrets.JWT_SECRETE }}
+  CLOUDINARY_URL: ${{ secrets.CLOUDINARY_URL }}
   CLOUDINARY_NAME: ${{ secrets.CLOUDINARY_NAME }}
   CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
   CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
@@ -21,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
