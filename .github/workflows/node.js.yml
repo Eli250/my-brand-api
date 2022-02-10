@@ -8,7 +8,12 @@ on:
     branches: [develop]
   pull_request:
     branches: [develop]
-
+env: 
+  TEST_DB: ${{ secrets.TEST_DB }}
+  JWT_SECRETE: ${{ secrets.JWT_SECRETE }}
+  CLOUD_NAME: ${{ secrets.CLOUD_NAME }}
+  API_KEY: ${{ secrets.API_KEY }}
+  API_SECRET: ${{ secrets.API_SECRET }}
 jobs:
   build:
     runs-on: ubuntu-latest
