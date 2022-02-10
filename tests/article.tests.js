@@ -55,7 +55,7 @@ describe("ARTICLE END-POINT TESTING", () => {
     request(app)
       .post("/api/v1/articles")
       .set("Authorization", tempToken)
-      .attach("image", "./public/Victor Status.png", "status.png")
+      .attach("image", "./public/VictorStatus.png", "status.png")
       .field(tempArticle)
       .end((err, res) => {
         expect(res.statusCode).to.equal(200);
@@ -66,7 +66,7 @@ describe("ARTICLE END-POINT TESTING", () => {
     request(app)
       .post("/api/v1/articles")
       .set("Authorization", tempToken)
-      .attach("image", "./public/Victor Status.png", "status.png")
+      .attach("image", "./public/VictorStatus.png", "status.png")
       .field({
         title: "This is my title",
       })
