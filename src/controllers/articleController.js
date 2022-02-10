@@ -1,11 +1,9 @@
-import { string } from "joi";
 import { uploadFile } from "../helpers/fileUpload";
 import Article from "../models/article";
 import { ArticleServices } from "../services/articleServices";
 import Comment from "../models/comment";
 import { CommentServices } from "../services/commentServices";
 export class ArticleController {
-  // TODO Don't access database from this file you only needs
   async createArticle(req, res, next) {
     try {
       req.body.image = await uploadFile(req);

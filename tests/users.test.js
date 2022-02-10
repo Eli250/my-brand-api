@@ -8,21 +8,12 @@ import "dotenv/config";
 use(chaiHttp);
 
 describe("USER END-POINT-TEST", (done) => {
-  // before("BEFORE ALL TEST", async () => {
-  //   const res = await request(app).post("/api/v1/user/register").send({
-  //     username: "Admin1",
-  //     email: "admin@test.com",
-  //     password: "@Admin123",
-  //   });
-  //   expect(res).to.have.status([201]);
-  // });
-
   it("Log In Succceed", (done) => {
     request(app)
       .post("/api/v1/user/login")
       .send({
         email: "admin@test.com",
-        password: "@Admin123",
+        password: "@Admin001",
       })
       .expect(200)
       .then((res) => {
@@ -58,9 +49,9 @@ describe("USER END-POINT-TEST", (done) => {
   });
   it("Should Register a User", async () => {
     const res = await request(app).post("/api/v1/user/register").send({
-      username: "Eli",
-      email: "eli@test.com",
-      password: "@Password1",
+      username: "Tester",
+      email: "tester@test.com",
+      password: "@Tester001",
     });
     expect(res).to.have.status([201]);
   });
