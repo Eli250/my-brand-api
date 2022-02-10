@@ -57,7 +57,7 @@ describe("QUERY END-POINT-TEST", () => {
       .send({
         senderName: "New User",
         message: "Test query message create",
-        email: "me@you.com",
+        email: "me@test.com",
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(200);

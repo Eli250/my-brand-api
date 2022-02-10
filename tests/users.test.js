@@ -17,15 +17,6 @@ describe("USER END-POINT-TEST", (done) => {
   //   expect(res).to.have.status([201]);
   // });
 
-  it("Should Create User", async () => {
-    const res = await request(app).post("/api/v1/user/register").send({
-      username: "@Test123",
-      email: "user1@test.com",
-      password: "@Test123",
-    });
-    expect(res).to.have.status([201]);
-  });
-
   it("Log In Succceed", (done) => {
     request(app)
       .post("/api/v1/user/login")
@@ -64,6 +55,14 @@ describe("USER END-POINT-TEST", (done) => {
         done();
       })
       .catch((err) => done(err));
+  });
+  it("Should Register a User", async () => {
+    const res = await request(app).post("/api/v1/user/register").send({
+      username: "Eli",
+      email: "eli@test.com",
+      password: "@Password1",
+    });
+    expect(res).to.have.status([201]);
   });
   // after("AFTER CLEAR USER", (done) => {
   //   User.deleteMany({}, (err) => {
