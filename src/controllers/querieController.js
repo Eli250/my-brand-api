@@ -45,7 +45,6 @@ export class QueryController {
         res.status(200).json({ message: "Query Updated!", data: query });
       else res.status(404).json({ message: query });
     } catch (error) {
-      console.log(error);
       res.status(404).json({ error: "Something went wrong!" });
     }
   }

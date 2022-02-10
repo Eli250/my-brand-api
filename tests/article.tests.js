@@ -11,27 +11,13 @@ import { hashPassword } from "../src/helpers/passwordSecurity";
 import { generateToken } from "../src/helpers/jwtFunctions";
 
 use(chaiHttp);
-let tempArticle = {
-  title: "Temp Art!",
-  content: "This saves temp article.",
-};
+
 let ATest1;
 let ATest2;
-let tempUser;
-let tempToken = "";
+let tempToken = `Bearer ${process.env.TEST_TOKEN}`;
 
 describe("ARTICLE END-POINT TESTING", () => {
   beforeEach("POPULATE TEST", (done) => {
-    const user = {
-      username: "Admin",
-      email: "admin@test.com",
-      password: hashPassword("@Admin123"),
-    };
-
-    new User(user).save();
-
-    tempToken = `Bearer ${generateToken({ id: user._id })}`;
-
     const createArticle = async function () {
       const testArticle1 = Article({
         title: "Testing Article1!",
@@ -64,6 +50,10 @@ describe("ARTICLE END-POINT TESTING", () => {
   });
 
   it("Should Allow Create Article.", (done) => {
+    const tempArticle = {
+      title: "Temp Art!",
+      content: "This saves temp article.",
+    };
     request(app)
       .post("/api/v1/articles")
       .set("Authorization", tempToken)
@@ -74,10 +64,23 @@ describe("ARTICLE END-POINT TESTING", () => {
         done();
       });
   });
+  it("Should Not Create Article. Missing Field.", (done) => {
+    request(app)
+      .post("/api/v1/articles")
+      .set("Authorization", tempToken)
+      .attach("image", "./public/Victor Status.png", "status.png")
+      .field({
+        title: "This is my title",
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
   it("Should Not Allow Create Article.", (done) => {
     request(app)
       .post("/api/v1/articles")
-      .send(tempArticle)
+      .send({ title: "Temp Art!", content: "This saves temp article." })
       .expect(401)
       .then((res) => {
         expect(res.status).to.be.eql(401);
@@ -94,6 +97,26 @@ describe("ARTICLE END-POINT TESTING", () => {
     const res = await request(app).get(`/api/v1/articles/${ATest1._id}`);
     expect(res).to.have.status([200]);
   });
+  it("Should Update an Article", async () => {
+    const res = await request(app)
+      .patch(`/api/v1/articles/${ATest1._id}`)
+      .set("Authorization", tempToken)
+      .send({
+        title: "Testing Article1!",
+        content: "This checks if we are able to create the new article.",
+      });
+    expect(res).to.have.status([200]);
+  });
+  it("Should Fail to Update an Article", async () => {
+    const res = await request(app)
+      .patch(`/api/v1/articles/${ATest2._email}`)
+      .set("Authorization", tempToken)
+      .send({
+        title: "Testing Article1!",
+        content: "This checks if we are able to create the new article.",
+      });
+    expect(res).to.have.status([404]);
+  });
 
   it("Should Add Comment", async () => {
     const res = await request(app)
@@ -104,7 +127,7 @@ describe("ARTICLE END-POINT TESTING", () => {
       });
     expect(res).to.have.status([201]);
   });
-  it("Should Fail to Add Comment", async () => {
+  it("Should Fail to Add Comment Wrong URL", async () => {
     const res = await request(app)
       .post(`/api/v1/articles/${ATest1._id}/comme`)
       .send({
@@ -112,6 +135,15 @@ describe("ARTICLE END-POINT TESTING", () => {
         comment: "That really worlks!",
       });
     expect(res).to.have.status([404]);
+  });
+  it("Should Fail to Add Comment If Any Field Is Empty", async () => {
+    const res = await request(app)
+      .post(`/api/v1/articles/${ATest1._id}/comments`)
+      .send({
+        sender: "",
+        comment: "That really worlks!",
+      });
+    expect(res).to.have.status([400]);
   });
   it("Should Fail to Add Comment (No article found)", async () => {
     const res = await request(app).post(`/api/v1/articles/comments`).send({
@@ -121,22 +153,30 @@ describe("ARTICLE END-POINT TESTING", () => {
     expect(res).to.have.status([404]);
   });
   it("Should Get Comments", async () => {
-    const res = await request(app)
-      .get(`/api/v1/articles/${ATest1._id}/comments`)
-      .send({
-        sender: "Hirwa",
-        comment: "That really worlks!",
-      });
+    const res = await request(app).get(
+      `/api/v1/articles/${ATest1._id}/comments`
+    );
     expect(res).to.have.status([200]);
+  });
+  it("Should Not Get Comments For Wrong Article ID", async () => {
+    const res = await request(app).get(
+      `/api/v1/articles/${ATest1._i}/comments`
+    );
+    expect(res).to.have.status([404]);
   });
   it("Should Not Get Any Article", async () => {
     const res = await request(app).get(`/api/v1/aritcle/${ATest1._id}`);
     expect(res).to.have.status([404]);
   });
-
-  after("AFTER CLEAR POST DATA", (done) => {
-    Article.deleteMany({}, (err) => {
-      done();
-    });
+  it("Should Delete an Article", async () => {
+    const res = await request(app)
+      .delete(`/api/v1/articles/${ATest1._id}`)
+      .set("Authorization", tempToken);
+    expect(res).to.have.status([404]);
   });
+  // after("AFTER CLEAR POST DATA", (done) => {
+  //   Article.deleteMany({}, (err) => {
+  //     done();
+  //   });
+  // });
 });

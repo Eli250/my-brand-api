@@ -20,7 +20,7 @@ export class ArticleController {
       res.status(200).json({ message: "Article Created!", data: article });
     } catch (error) {
       console.log(error);
-      res.status(404).json({ error: "There was an error creating article!" });
+      res.status(400).json({ error: "There was an error creating article!" });
     }
   }
   async getAllArticles(req, res, next) {
@@ -63,10 +63,9 @@ export class ArticleController {
       }
       const article = await ArticleServices.updateArticle(req.params.id, data);
       if (typeof article !== "string")
-        res.status(200).json({ message: "Article Created!", data: article });
+        res.status(200).json({ message: "Article Updated!", data: article });
       else res.status(404).json({ message: article });
     } catch (error) {
-      console.log(error);
       res.status(404).json({ error: "Something went wrong!" });
     }
   }
@@ -85,7 +84,7 @@ export class ArticleController {
         return res.status(201).send(articleSaved);
       }
     } catch (error) {
-      console.log(error);
+      return res.status(400).json({ message: "Please Fill All Fields!" });
     }
   }
   async commentsOnArticle(req, res, next) {

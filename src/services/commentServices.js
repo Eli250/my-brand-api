@@ -24,7 +24,6 @@ export class CommentServices {
   }
   static async getComment(id) {
     const article = await Comment.findOne({ _id: id });
-    console.log(article);
     return article;
   }
 }

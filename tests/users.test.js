@@ -8,14 +8,14 @@ import "dotenv/config";
 use(chaiHttp);
 
 describe("USER END-POINT-TEST", (done) => {
-  before("BEFORE ALL TEST", async () => {
-    const res = await request(app).post("/api/v1/user/register").send({
-      username: "mocker",
-      email: "mocker@test.com",
-      password: "@Test123",
-    });
-    expect(res).to.have.status([201]);
-  });
+  // before("BEFORE ALL TEST", async () => {
+  //   const res = await request(app).post("/api/v1/user/register").send({
+  //     username: "Admin1",
+  //     email: "admin@test.com",
+  //     password: "@Admin123",
+  //   });
+  //   expect(res).to.have.status([201]);
+  // });
 
   it("Should Create User", async () => {
     const res = await request(app).post("/api/v1/user/register").send({
@@ -30,8 +30,8 @@ describe("USER END-POINT-TEST", (done) => {
     request(app)
       .post("/api/v1/user/login")
       .send({
-        email: "mocker@test.com",
-        password: "@Test123",
+        email: "admin@test.com",
+        password: "@Admin123",
       })
       .expect(200)
       .then((res) => {
@@ -65,10 +65,10 @@ describe("USER END-POINT-TEST", (done) => {
       })
       .catch((err) => done(err));
   });
-  after("AFTER CLEAR USER", (done) => {
-    User.deleteMany({}, (err) => {
-      console.log("success");
-      done();
-    });
-  });
+  // after("AFTER CLEAR USER", (done) => {
+  //   User.deleteMany({}, (err) => {
+  //     console.log("success");
+  //     done();
+  //   });
+  // });
 });

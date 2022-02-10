@@ -5,6 +5,7 @@ import app from "../src/app";
 import "dotenv/config";
 import User from "../src/models/user";
 import Query from "../src/models/query";
+import { QueryServices } from "../src/services/queryServices";
 import { hashPassword } from "../src/helpers/passwordSecurity";
 import { generateToken } from "../src/helpers/jwtFunctions";
 use(chaiHttp);
@@ -12,19 +13,11 @@ use(chaiHttp);
 let queryTest;
 
 let queryTest2;
-let tempToken = "";
+
+let tempToken = `Bearer ${process.env.TEST_TOKEN}`;
 
 describe("QUERY END-POINT-TEST", () => {
   before("POPULATE QUERY", (done) => {
-    const user = {
-      username: "Admin",
-      email: "admin@test.com",
-      password: hashPassword("@Admin123"),
-    };
-
-    new User(user).save();
-    tempToken = `Bearer ${generateToken({ id: user._id })}`;
-
     const createQuery1 = async function () {
       const query1 = Query({
         senderName: "user",
@@ -71,6 +64,18 @@ describe("QUERY END-POINT-TEST", () => {
         done();
       });
   });
+  it("Should Fail Create Query", (done) => {
+    request(app)
+      .post("/api/v1/queries")
+      .send({
+        message: "Test query message create",
+        email: "me@you.com",
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
 
   it("Should Get All Queries", (done) => {
     request(app)
@@ -86,6 +91,34 @@ describe("QUERY END-POINT-TEST", () => {
       .get(`/api/v1/queries/${queryTest._id}`)
       .set("Authorization", tempToken);
     expect(res).to.have.status([200]);
+  });
+  it("Should Update Query!", (done) => {
+    request(app)
+      .patch(`/api/v1/queries/${queryTest._id}`)
+      .send({
+        message: "Test query message create",
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        done();
+      });
+  });
+  it("Should Fail To Update Query (No ID Found)!", (done) => {
+    request(app)
+      .patch(`/api/v1/queries/${queryTest._i}`)
+      .send({
+        message: "Test query message create",
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(404);
+        done();
+      });
+  });
+  it("Should Fail To Get One Query When Wrong ID", async () => {
+    const res = await request(app)
+      .get(`/api/v1/queries/${queryTest._idd}`)
+      .set("Authorization", tempToken);
+    expect(res).to.have.status([500]);
   });
   it("Should Fail To Create Query", (done) => {
     request(app)
@@ -121,6 +154,12 @@ describe("QUERY END-POINT-TEST", () => {
   it("Should Fail To Get One Query (Anauthorized)", async () => {
     const res = await request(app).get(`/api/v1/queries/${queryTest._id}`);
     expect(res).to.have.status([401]);
+  });
+  it("Should Fail To Delete A Query _ No Query Found!", async () => {
+    const res = await request(app)
+      .delete(`/api/v1/queries/${queryTest2._id}`)
+      .set("Authorization", tempToken);
+    expect(res).to.have.status([404]);
   });
   after("AFTER ALL QUERY TEST", (done) => {
     Query.deleteMany({}, (err) => {
