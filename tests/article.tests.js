@@ -7,8 +7,6 @@ import User from "../src/models/user";
 import Article from "../src/models/article";
 import { ArticleServices } from "../src/services/articleServices";
 import "dotenv/config";
-import { hashPassword } from "../src/helpers/passwordSecurity";
-import { generateToken } from "../src/helpers/jwtFunctions";
 
 use(chaiHttp);
 
