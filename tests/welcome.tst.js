@@ -11,4 +11,8 @@ describe("TEST WELCOME PAGE", () => {
     const res = await request(app).get("/");
     expect(res.body.message).to.be.eql("Welcome to my the API");
   });
+  it("Should Deny Unkown source", async () => {
+    const res = await request(app).get("/unknown");
+    expect(res.status).to.be.eql(404);
+  });
 });
