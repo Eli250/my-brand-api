@@ -5,25 +5,19 @@ import app from "../src/app";
 import "dotenv/config";
 import User from "../src/models/user";
 import Query from "../src/models/query";
+import { QueryServices } from "../src/services/queryServices";
 import { hashPassword } from "../src/helpers/passwordSecurity";
-
+import { generateToken } from "../src/helpers/jwtFunctions";
 use(chaiHttp);
 
 let queryTest;
 
 let queryTest2;
-let tempToken = "";
+
+let tempToken = `Bearer ${process.env.TEST_TOKEN}`;
 
 describe("QUERY END-POINT-TEST", () => {
   before("POPULATE QUERY", (done) => {
-    const user = {
-      username: "Admin",
-      email: "admin@test.com",
-      password: hashPassword("@Admin123"),
-    };
-
-    new User(user).save();
-
     const createQuery1 = async function () {
       const query1 = Query({
         senderName: "user",
@@ -41,12 +35,9 @@ describe("QUERY END-POINT-TEST", () => {
 
     const createQuery2 = async function () {
       const query2 = Query({
-        sender: {
-          name: "sender name",
-          email: "testtest@test.com",
-        },
+        senderName: "Another One",
         message: "Test query message",
-        location: "testLocation",
+        email: "test@test.com",
       });
 
       const setQueryTest2 = async function () {
@@ -59,36 +50,34 @@ describe("QUERY END-POINT-TEST", () => {
     createQuery2();
     done();
   });
-  it("Should Log In First", (done) => {
-    request(app)
-      .post("/api/v1/user/login")
-      .send({
-        email: "admin@test.com",
-        password: "@Admin123",
-      })
-      .expect(200)
-      .then((res) => {
-        expect(res.body.message).to.be.eql("Successfully Logged In!");
-        tempToken = `Bearer ${res.body.accessToken}`;
-        done();
-      })
-      .catch((err) => done(err));
-  });
-  it("QUERY SHOULD BE CREATED", (done) => {
+
+  it("Query Creation Succeed!", (done) => {
     request(app)
       .post("/api/v1/queries")
       .send({
         senderName: "New User",
         message: "Test query message create",
-        email: "me@you.com",
+        email: "me@test.com",
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(200);
         done();
       });
   });
+  it("Should Fail Create Query", (done) => {
+    request(app)
+      .post("/api/v1/queries")
+      .send({
+        message: "Test query message create",
+        email: "me@you.com",
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
 
-  it("SHOULD GET ALL QUERIES", (done) => {
+  it("Should Get All Queries", (done) => {
     request(app)
       .get("/api/v1/queries")
       .set("Authorization", tempToken)
@@ -97,8 +86,55 @@ describe("QUERY END-POINT-TEST", () => {
         done();
       });
   });
-
-  it("GET QUERY SHOULD FAIL", (done) => {
+  it("Should Get One Query", async () => {
+    const res = await request(app)
+      .get(`/api/v1/queries/${queryTest._id}`)
+      .set("Authorization", tempToken);
+    expect(res).to.have.status([200]);
+  });
+  it("Should Update Query!", (done) => {
+    request(app)
+      .patch(`/api/v1/queries/${queryTest._id}`)
+      .send({
+        message: "Test query message create",
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        done();
+      });
+  });
+  it("Should Fail To Update Query (No ID Found)!", (done) => {
+    request(app)
+      .patch(`/api/v1/queries/${queryTest._i}`)
+      .send({
+        message: "Test query message create",
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(404);
+        done();
+      });
+  });
+  it("Should Fail To Get One Query When Wrong ID", async () => {
+    const res = await request(app)
+      .get(`/api/v1/queries/${queryTest._idd}`)
+      .set("Authorization", tempToken);
+    expect(res).to.have.status([500]);
+  });
+  it("Should Fail To Create Query", (done) => {
+    request(app)
+      .post("/api/v1/queries")
+      .send({
+        senderName: "New User",
+        message: "Test query message create",
+      })
+      .end((err, res) => {
+        expect(res.body.message).to.equal(
+          "Please check your input: email is required"
+        );
+        done();
+      });
+  });
+  it("Should Fail To get All Queries", (done) => {
     request(app)
       .get("/api/v1/querie")
       .set("Authorization", tempToken)
@@ -107,27 +143,24 @@ describe("QUERY END-POINT-TEST", () => {
         done();
       });
   });
-
-  it("SHOULD GET ONE QUERY", (done) => {
+  it("Should Fail (Anauthorized)", (done) => {
     request(app)
-      .get(`/api/v1/queries/${queryTest2._id}`)
-      .set("Authorization", tempToken)
+      .get("/api/v1/queries")
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(401);
         done();
       });
   });
-
-  it("SHOULD DELETE ONE QUERY", (done) => {
-    request(app)
-      .delete(`/api/v1/queries/${queryTest._id}`)
-      .set("Authorization", tempToken)
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
-        done();
-      });
+  it("Should Fail To Get One Query (Anauthorized)", async () => {
+    const res = await request(app).get(`/api/v1/queries/${queryTest._id}`);
+    expect(res).to.have.status([401]);
   });
-
+  it("Should Fail To Delete A Query _ No Query Found!", async () => {
+    const res = await request(app)
+      .delete(`/api/v1/queries/${queryTest2._id}`)
+      .set("Authorization", tempToken);
+    expect(res).to.have.status([404]);
+  });
   after("AFTER ALL QUERY TEST", (done) => {
     Query.deleteMany({}, (err) => {
       done();

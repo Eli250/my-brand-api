@@ -1,37 +1,30 @@
-import { expect, request, use } from "chai";
+import { expect, use } from "chai";
+import request from "supertest";
 import chaiHttp from "chai-http";
 import app from "../src/app";
 import User from "../src/models/user";
-import { hashPassword } from "../src/helpers/passwordSecurity";
 import "dotenv/config";
+import { randomEmail } from "./random-email";
 
 use(chaiHttp);
 
-describe("USER END-POINT-TEST", () => {
-  before("BEFORE ALL TEST", async () => {
-    const user = {
-      username: "Tester",
-      email: "tester@test.com",
-      password: hashPassword("@Test123"),
-    };
+describe("USER END-POINT-TEST", (done) => {
+  let email = randomEmail(5) + "@test.com";
 
-    await new User(user).save();
-  });
-
-  it("Should Create User", (done) => {
-    request(app)
-      .post("/api/v1/user/register")
-      .send({
-        username: "@Test123",
-        email: "user1@test.com",
-        password: "@Test123",
-      })
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
-        done();
-      });
-  });
-
+  // it("Log In Succceed", (done) => {
+  //   request(app)
+  //     .post("/api/v1/user/login")
+  //     .send({
+  //       email: "f3a19@test.com",
+  //       password: "@Tester001",
+  //     })
+  //     .expect(200)
+  //     .then((res) => {
+  //       expect(res.body.message).to.be.eql("Successfully Logged In!");
+  //       done();
+  //     })
+  //     .catch((err) => done(err));
+  // });
   it("Should Not Login", (done) => {
     request(app)
       .post("/api/v1/user/login")
@@ -44,23 +37,44 @@ describe("USER END-POINT-TEST", () => {
         done();
       });
   });
-  it("Log In First", (done) => {
+  it("Log In Fail (Invalid Credentials)", (done) => {
     request(app)
       .post("/api/v1/user/login")
       .send({
         email: "tester@test.com",
-        password: "@Test123",
+        password: "@Tes",
       })
       .then((res) => {
-        expect(res.body.message).to.be.eql("Successfully Logged In!");
+        expect(res.body.message).to.be.eql("Invalid Credentials!");
         done();
       })
       .catch((err) => done(err));
   });
-  after("AFTER CCLEAR USER", (done) => {
-    User.deleteMany({}, (err) => {
-      console.log("success");
-      done();
+  it("Should Register a User", async () => {
+    const res = await request(app).post("/api/v1/user/register").send({
+      username: "Tester",
+      email: email,
+      password: "@Tester001",
     });
+    expect(res).to.have.status([201]);
+  });
+  it("Should Not register a User", async () => {
+    const res = await request(app)
+      .post("/api/v1/user/register")
+      .attach("image", "./public/VictorStatus.png", "status.png")
+      .field({
+        username: "Tester",
+        email: email,
+        password: "@Tester001",
+      });
+    expect(res).to.have.status([500]);
+  });
+  it("Should Fail to Add Existing User", async () => {
+    const res = await request(app).post("/api/v1/user/register").send({
+      username: "admin",
+      email: "admin@test.com",
+      password: "@Tester001",
+    });
+    expect(res).to.have.status([409]);
   });
 });

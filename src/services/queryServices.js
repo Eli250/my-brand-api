@@ -1,4 +1,3 @@
-import { query } from "express";
 import Query from "../models/query";
 
 export class QueryServices {

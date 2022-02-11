@@ -42,7 +42,7 @@ export class UserControllers {
       if (exist) {
         const valid = await comparePassword(req.body.password, exist.password);
         if (!valid) {
-          res.status(401).json({ message: "Invalid credentials" });
+          res.status(401).json({ message: "Invalid Credentials!" });
         }
         const token = generateToken({ id: exist._id });
         res.status(200).json({
@@ -54,10 +54,10 @@ export class UserControllers {
         res.status(401).json({ message: "Invalid Credentials!" });
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        message: "Something Went Wrong!",
-      });
+      // console.log(error);
+      // res.status(500).json({
+      //   message: "Something Went Wrong!",
+      // });
     }
   }
 }

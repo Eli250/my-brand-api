@@ -5,9 +5,22 @@
     "description": "This is My Brand API",
     "version": "1.0.0",
     "contact": {
-      "email": "hirwaeli@outlook.com"
-    }
+      "name": "Eli Hirwa",
+      "email": "hirwaeli@outlook.com",
+      "url": "https://eli250.github.io/my-brand/"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "basePath": "/"
   },
+  "servers": [
+    {
+      "url": "http://develi-api.herokuapp.com/",
+      "description": "Production Server"
+    }
+  ],
   "tags": [
     {
       "name": "Home",
@@ -24,12 +37,6 @@
     {
       "name": "Queries",
       "description": "Queries Operations"
-    }
-  ],
-  "servers": [
-    {
-      "url": "http://localhost:3000",
-      "name": "DEV"
     }
   ],
   "paths": {
@@ -66,6 +73,9 @@
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "409": {
+            "description": "Conflicts / User Exists"
           }
         }
       }
@@ -95,17 +105,6 @@
       }
     },
     "/api/v1/articles": {
-      "get": {
-        "tags": ["Articles"],
-        "summary": "Get all articles",
-        "description": "Get all articles",
-        "operationId": "getArticles",
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      },
       "post": {
         "tags": ["Articles"],
         "summary": "Create article item",
@@ -141,6 +140,23 @@
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Bad request / Wrong Inputs"
+          },
+          "401": {
+            "description": "Anauthorized / Require Login"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Articles"],
+        "summary": "Get all articles",
+        "description": "Get all articles",
+        "operationId": "getArticles",
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -161,32 +177,13 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Articles"],
-        "summary": "Delete Article",
-        "description": "Delete One  Article",
-        "operationId": "delArticle",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authorization",
-            "required": true
+            "description": "OK"
           },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Artticle Id",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
+          "404": {
+            "description": "Not Found"
+          },
+          "401": {
+            "description": "Anauthorized / Require Login"
           }
         }
       },
@@ -219,8 +216,42 @@
           }
         ],
         "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "401": {
+            "description": "Anauthorized / Require Login"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Articles"],
+        "summary": "Delete Article",
+        "description": "Delete One  Article",
+        "operationId": "delArticle",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle Id",
+            "required": true
+          }
+        ],
+        "responses": {
           "200": {
             "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -249,8 +280,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Success"
+          "201": {
+            "description": "Created"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -310,6 +344,86 @@
             "name": "Authorization",
             "in": "header",
             "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/queries/{id}": {
+      "get": {
+        "tags": ["Queries"],
+        "summary": "Get One Query",
+        "description": "Get  Query By Id",
+        "operationId": "getOneQury",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Queries"],
+        "summary": "Update Query",
+        "description": "Update Query",
+        "operationId": "patchQuery",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle ID",
+            "required": true
+          },
+          {
+            "name": "Query",
+            "in": "body",
+            "description": "Query Update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Queries"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Queries"],
+        "summary": "Delete Query",
+        "description": "Delete One  Query",
+        "operationId": "delQuery",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Query Id",
             "required": true
           }
         ],
