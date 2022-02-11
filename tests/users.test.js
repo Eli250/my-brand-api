@@ -45,7 +45,7 @@ describe("USER END-POINT-TEST", (done) => {
         password: "@Tes",
       })
       .then((res) => {
-        expect(res.body.message).to.be.eql("Invalid credentials!");
+        expect(res.body.message).to.be.eql("Invalid Credentials!");
         done();
       })
       .catch((err) => done(err));

@@ -172,9 +172,9 @@ describe("ARTICLE END-POINT TESTING", () => {
       .set("Authorization", tempToken);
     expect(res).to.have.status([404]);
   });
-  // after("AFTER CLEAR POST DATA", (done) => {
-  //   Article.deleteMany({}, (err) => {
-  //     done();
-  //   });
-  // });
+  after("AFTER CLEAR POST DATA", (done) => {
+    Article.deleteMany({}, (err) => {
+      done();
+    });
+  });
 });
