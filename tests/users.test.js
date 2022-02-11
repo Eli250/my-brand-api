@@ -15,7 +15,7 @@ describe("USER END-POINT-TEST", (done) => {
     request(app)
       .post("/api/v1/user/login")
       .send({
-        email: "7d637@test.com",
+        email: "f3a19@test.com",
         password: "@Tester001",
       })
       .expect(200)
