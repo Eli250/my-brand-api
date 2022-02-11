@@ -58,7 +58,7 @@ describe("ARTICLE END-POINT TESTING", () => {
       .attach("image", "./public/VictorStatus.png", "status.png")
       .field(tempArticle)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(201);
         done();
       });
   });
@@ -103,7 +103,7 @@ describe("ARTICLE END-POINT TESTING", () => {
         title: "Testing Article1!",
         content: "This checks if we are able to create the new article.",
       });
-    expect(res).to.have.status([200]);
+    expect(res).to.have.status([201]);
   });
   it("Should Fail to Update an Article", async () => {
     const res = await request(app)
