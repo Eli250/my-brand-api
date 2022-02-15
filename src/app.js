@@ -8,6 +8,9 @@ import routes from "./routes";
 import "dotenv/config";
 
 const app = express();
+app.use(express.json());
+app.use(cors());
+app.use(morgan("dev"));
 
 const port = process.env.PORT || 3000;
 const mode = process.env.NODE_ENV || "development";
@@ -26,9 +29,6 @@ try {
     });
     console.log("PRO DB CONNECTED!");
   }
-  app.use(express.json());
-  app.use(cors());
-  app.use(morgan("dev"));
 
   app.get("/", (req, res) => {
     res.json({ message: "Welcome to my the API" });
