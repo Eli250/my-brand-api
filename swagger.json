@@ -385,6 +385,9 @@
         "email": {
           "type": "string"
         },
+        "subject": {
+          "type": "string"
+        },
         "message": {
           "type": "string"
         }

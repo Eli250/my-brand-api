@@ -11,8 +11,8 @@ export class ArticleController {
       req.body.image = await uploadFile(req);
       const data = new Article({
         title: req.body.title,
-        description: req.body.description,
         content: req.body.content,
+        author: req.body.author,
         image: req.body.image,
         date_created: new Date(),
       });
@@ -49,8 +49,8 @@ export class ArticleController {
       if (req.body.title) {
         data["title"] = req.body.title;
       }
-      if (req.body.description) {
-        data["description"] = req.body.description;
+      if (req.body.author) {
+        data["author"] = req.body.author;
       }
       if (req.body.content) {
         data["content"] = req.body.content;
@@ -74,15 +74,12 @@ export class ArticleController {
     try {
       const article = await ArticleServices.getArticle(req.params.id);
       if (article) {
-        console.log("---CREATING----");
         const comment = new Comment({
           sender: req.body.sender,
           comment: req.body.comment,
           article: req.params.id,
         });
-        console.log("---CREATED DONE----");
         const savedComment = await CommentServices.createComment(comment);
-        console.log("---COMMENT DONE----");
         article.comments.push(savedComment);
         const articleSaved = await ArticleServices.createArticle(article);
         return res.status(201).send(articleSaved);

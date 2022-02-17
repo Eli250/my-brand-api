@@ -6,6 +6,7 @@ export class QueryController {
     try {
       const data = new Query({
         senderName: req.body.senderName,
+        subject: req.body.subject,
         email: req.body.email,
         message: req.body.message,
       });

@@ -2,8 +2,10 @@ import mongoose from "mongoose";
 
 const querySchema = mongoose.Schema({
   senderName: { type: String, required: true },
+  subject: { type: String, required: true },
   email: { type: String, required: true },
   message: { type: String, required: true },
+  location: { type: String, required: false },
   date_sent: { type: Date, default: Date.now() },
 });
 const Query = mongoose.model("Query", querySchema);

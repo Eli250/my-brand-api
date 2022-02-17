@@ -7,4 +7,5 @@ export const queryData = joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "org"] } })
     .required(),
   message: joi.string().required(),
+  subject: joi.string().required(),
 });
