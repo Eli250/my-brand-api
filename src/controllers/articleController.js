@@ -45,6 +45,7 @@ export class ArticleController {
   async updateArticle(req, res, next) {
     try {
       const data = {};
+      req.body.image = await uploadFile(req);
       if (req.body.title) {
         data["title"] = req.body.title;
       }
@@ -65,6 +66,7 @@ export class ArticleController {
         res.status(200).json({ message: "Article Created!", data: article });
       else res.status(404).json({ message: article });
     } catch (error) {
+      console.log(error);
       res.status(404).json({ error: "Something went wrong!" });
     }
   }

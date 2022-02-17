@@ -27,6 +27,7 @@ route.post("/:id/comments", new ArticleController().createComment);
 route.patch(
   "/:id",
   authenticate,
+  upload.single("image"),
   articleValidation,
   new ArticleController().updateArticle
 );

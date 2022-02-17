@@ -209,13 +209,20 @@
             "required": true
           },
           {
-            "name": "Article",
-            "in": "body",
-            "description": "Article Update",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Article"
-            }
+            "name": "title",
+            "in": "formData",
+            "description": "title"
+          },
+          {
+            "name": "content",
+            "in": "formData",
+            "description": "content"
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file",
+            "description": "image"
           }
         ],
         "responses": {
