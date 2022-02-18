@@ -29,6 +29,7 @@ describe("QUERY END-POINT-TEST", () => {
         senderName: "user",
         message: "Test query message",
         email: "test@test.com",
+        location: "Kigali",
       });
 
       const setQueryTest = async function () {
@@ -81,6 +82,7 @@ describe("QUERY END-POINT-TEST", () => {
         senderName: "New User",
         message: "Test query message create",
         email: "me@you.com",
+        location: "Kigali",
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(200);

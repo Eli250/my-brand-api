@@ -5,7 +5,7 @@ const querySchema = mongoose.Schema({
   subject: { type: String, required: true },
   email: { type: String, required: true },
   message: { type: String, required: true },
-  location: { type: String, required: false },
+  location: { type: String, required: true },
   date_sent: { type: Date, default: Date.now() },
 });
 const Query = mongoose.model("Query", querySchema);

@@ -9,6 +9,7 @@ export class QueryController {
         subject: req.body.subject,
         email: req.body.email,
         message: req.body.message,
+        location: req.body.location,
       });
       const query = await QueryServices.createQuery(data);
       res.status(200).json({ message: "Query Created!:", data: query });
